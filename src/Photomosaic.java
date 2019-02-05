@@ -55,6 +55,7 @@ public class Photomosaic {
 			colorCodes.add(read.nextInt(16));
 		}
 		read.close();
+		System.out.printf("Loaded %s tiles\n", colorCodes.size());
 		for(int x=0;x<in.getWidth()/step;x++){
 			for(int y=0;y<in.getHeight()/step;y++){
 				Color c=calculateAverage(x*step,y*step,step,step,in);
