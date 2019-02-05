@@ -3,7 +3,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
@@ -35,9 +37,10 @@ public class Photomosaic {
 	public static int distanceSquared(Color c1,Color c2){
 		int dr=c1.getRed()-c2.getRed(),dg=c1.getGreen()-c2.getGreen(),db=c1.getBlue()-c2.getBlue();
 		return (dr*dr)+(dg*dg)+(db*db);
-	}
-	public static void main(String[]a) throws IOException{
+	}	
+	public static void main(String[]a) throws IOException{		
 		ImageSign.main(null);
+		Set<String>set=new HashSet<>();
 		Scanner input=new Scanner(System.in);
 		BufferedImage in=ImageIO.read(new File(input.nextLine()));
 		input.close();
@@ -74,10 +77,12 @@ public class Photomosaic {
 						out.setRGB(x*tileSize+x2, y*tileSize+y2,b.getRGB(x2,y2));
 					}
 				}
+				set.add(b.toString()+String.format("%06X",calculateAverage(0,0,step,step,b).getRGB()&0xFFFFFF));
 			}
 			System.out.printf("Finished column %s of %s\n",x+1,numCol);
 		}
+		System.out.printf("Used %s distinct tiles of %s\n",set.size(),colorCodes.size());
 		System.out.print("Saving");
-		ImageIO.write(out,"png",new File("output.png"));
+		ImageIO.write(out,"jpg",new File("output.jpg"));
 	}
 }
