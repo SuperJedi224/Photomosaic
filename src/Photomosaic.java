@@ -2,12 +2,9 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
 
-import javax.imageio.IIOException;
+import java.util.*;
+
 import javax.imageio.ImageIO;
 
 import com.pulispace.mc.ui.panorama.util.BigBufferedImage;
@@ -19,7 +16,7 @@ import com.pulispace.mc.ui.panorama.util.BigBufferedImage;
  * https://creativecommons.org/licenses/by/4.0/
  */
 public class Photomosaic {
-	static final int step=7;
+	static final int step=6;
 	static final int tileSize=160;
 	public static Color calculateAverage(int x,int y,int w,int h,BufferedImage b){
 		long tr=0,tg=0,tb=0;
@@ -40,21 +37,17 @@ public class Photomosaic {
 	}	
 	public static void main(String[]a) throws IOException{		
 		ImageSign.main(null);
-		Set<String>set=new HashSet<>();
 		Scanner input=new Scanner(System.in);
 		BufferedImage in=ImageIO.read(new File(input.nextLine()));
 		input.close();
 		BufferedImage out=BigBufferedImage.create((in.getWidth()/step)*tileSize,(in.getHeight()/step)*tileSize,BufferedImage.TYPE_INT_RGB);
 		final int numCol=in.getWidth()/step;
 		ArrayList<Integer>colorCodes=new ArrayList<>();
-		ArrayList<BufferedImage>tiles=new ArrayList<>();
+		ArrayList<String>tiles=new ArrayList<>();
+		HashMap<String,BufferedImage>map=new HashMap<>();
 		Scanner read=new Scanner(new File("sign.txt"));
 		while(read.hasNext()){
-			String s=read.next();
-			try{tiles.add(ImageIO.read(new File("Input/"+s)));}catch(IIOException e){
-				System.err.println(s);
-				throw e;
-			}
+			tiles.add(read.next());
 			colorCodes.add(read.nextInt(16));
 		}
 		read.close();
@@ -69,7 +62,13 @@ public class Photomosaic {
 					int d=distanceSquared(c,new Color(i));
 					if(d<minD){
 						minD=d;
-						b=tiles.get(j);
+						if(map.containsKey(tiles.get(j))){
+							b=map.get(tiles.get(j));
+						}else{
+							b=ImageIO.read(new File("Input/"+tiles.get(j)));
+							map.put(tiles.get(j),b);
+						}
+						
 					}
 				}
 				for(int x2=0;x2<tileSize;x2++){
@@ -77,12 +76,12 @@ public class Photomosaic {
 						out.setRGB(x*tileSize+x2, y*tileSize+y2,b.getRGB(x2,y2));
 					}
 				}
-				set.add(b.toString()+String.format("%06X",calculateAverage(0,0,step,step,b).getRGB()&0xFFFFFF));
 			}
 			System.out.printf("Finished column %s of %s\n",x+1,numCol);
 		}
-		System.out.printf("Used %s distinct tiles of %s\n",set.size(),colorCodes.size());
+		System.out.printf("Used %s distinct tiles of %s\n",map.size(),colorCodes.size());
 		System.out.print("Saving");
+		map=null;
 		ImageIO.write(out,"jpg",new File("output.jpg"));
 	}
 }
