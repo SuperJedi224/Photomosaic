@@ -28,11 +28,21 @@ public class ImageSign {
 	}
 	public static void main(String[] args) throws IOException {
 		File inFolder=new File("Input");
+		int i=0;
 		PrintStream output=new PrintStream("sign.txt");
 		for(File imageFile:inFolder.listFiles()){
 			BufferedImage image=ImageIO.read(imageFile);
-			output.printf("%s %06X\n",imageFile.getName(),calculateAverage(0,0,Photomosaic.tileSize,Photomosaic.tileSize,image));
+			output.printf("%s %06X %06X %06X %06X %06X\n",
+					imageFile.getName(),
+					calculateAverage(0,0,Photomosaic.tileSize,Photomosaic.tileSize,image),
+					calculateAverage(0,0,Photomosaic.tileSize/2,Photomosaic.tileSize/2,image),
+					calculateAverage(Photomosaic.tileSize/2,0,Photomosaic.tileSize/2,Photomosaic.tileSize/2,image),
+					calculateAverage(0,Photomosaic.tileSize/2,Photomosaic.tileSize/2,Photomosaic.tileSize/2,image),
+					calculateAverage(Photomosaic.tileSize/2,Photomosaic.tileSize/2,Photomosaic.tileSize/2,Photomosaic.tileSize/2,image)
+			);
+			i++;
 		}
+		System.out.println("Calculated signatures for "+i+" tile images at "+Photomosaic.tileSize+"x"+Photomosaic.tileSize);
 		output.close();
 	}
 

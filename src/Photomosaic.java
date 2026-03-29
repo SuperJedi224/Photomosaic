@@ -16,8 +16,8 @@ import com.pulispace.mc.ui.panorama.util.BigBufferedImage;
  * https://creativecommons.org/licenses/by/4.0/
  */
 public class Photomosaic {
-	static final int step=6;
-	static final int tileSize=160;
+	static final int step=15;
+	static final int tileSize=240;
 	public static Color calculateAverage(int x,int y,int w,int h,BufferedImage b){
 		long tr=0,tg=0,tb=0;
 		int a=w*h;
@@ -38,28 +38,42 @@ public class Photomosaic {
 	public static void main(String[]a) throws IOException{		
 		ImageSign.main(null);
 		Scanner input=new Scanner(System.in);
+		System.out.print("Enter input file:");
 		BufferedImage in=ImageIO.read(new File(input.nextLine()));
 		input.close();
 		BufferedImage out=BigBufferedImage.create((in.getWidth()/step)*tileSize,(in.getHeight()/step)*tileSize,BufferedImage.TYPE_INT_RGB);
 		final int numCol=in.getWidth()/step;
-		ArrayList<Integer>colorCodes=new ArrayList<>();
+		ArrayList<int[]>colorCodes=new ArrayList<>();
 		ArrayList<String>tiles=new ArrayList<>();
 		HashMap<String,BufferedImage>map=new HashMap<>();
 		Scanner read=new Scanner(new File("sign.txt"));
 		while(read.hasNext()){
 			tiles.add(read.next());
-			colorCodes.add(read.nextInt(16));
+			colorCodes.add(new int[] {
+					read.nextInt(16),
+					read.nextInt(16),
+					read.nextInt(16),
+					read.nextInt(16),
+					read.nextInt(16)
+			});
 		}
 		read.close();
 		System.out.printf("Loaded %s tiles\n", colorCodes.size());
 		for(int x=0;x<in.getWidth()/step;x++){
 			for(int y=0;y<in.getHeight()/step;y++){
-				Color c=calculateAverage(x*step,y*step,step,step,in);
-				int minD=99999;
+				Color[] c=new Color[] {
+						calculateAverage(x*step,y*step,step,step,in),
+						calculateAverage(x*step,y*step,step/2,step/2,in),
+						calculateAverage(x*step+step/2,y*step,step/2,step/2,in),
+						calculateAverage(x*step,y*step+step/2,step/2,step/2,in),
+						calculateAverage(x*step+step/2,y*step+step/2,step/2,step/2,in)
+				};
+				int minD=9999999;
 				BufferedImage b=null;
 				for(int j=0;j<colorCodes.size();j++){
-					int i=colorCodes.get(j);
-					int d=distanceSquared(c,new Color(i));
+					int[] tileCodes=colorCodes.get(j);
+					int d=0;
+					for(int k=0;k<5;k++)d+=distanceSquared(c[k],new Color(tileCodes[k]));
 					if(d<minD){
 						minD=d;
 						if(map.containsKey(tiles.get(j))){
