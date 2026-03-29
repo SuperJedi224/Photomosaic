@@ -11,12 +11,12 @@ import com.pulispace.mc.ui.panorama.util.BigBufferedImage;
 
 
 /**
- * Copyright 2019 Johnathan Waugh
+ * Copyright 2019-2026 Johnathan Waugh
  * This class is hereby released under the Creative Commons Attribution license version 4.0
  * https://creativecommons.org/licenses/by/4.0/
  */
 public class Photomosaic {
-	static final int step=15;
+	static final int step=16;
 	static final int tileSize=240;
 	public static Color calculateAverage(int x,int y,int w,int h,BufferedImage b){
 		long tr=0,tg=0,tb=0;
@@ -94,7 +94,7 @@ public class Photomosaic {
 			System.out.printf("Finished column %s of %s\n",x+1,numCol);
 		}
 		System.out.printf("Used %s distinct tiles of %s\n",map.size(),colorCodes.size());
-		System.out.print("Saving");
+		System.out.print("Saving...");
 		map=null;
 		ImageIO.write(out,"jpg",new File("output.jpg"));
 	}

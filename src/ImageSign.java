@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import javax.imageio.ImageIO;
 
 /**
- * Copyright 2019 Johnathan Waugh
+ * Copyright 2019-2026 Johnathan Waugh
  * This class is hereby released under the Creative Commons Attribution license version 4.0
  * https://creativecommons.org/licenses/by/4.0/
  */
