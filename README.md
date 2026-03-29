@@ -11,7 +11,7 @@ Once you have placed your image tiles in the Input folder and compiled the java 
 While this program is unlikely to have any serious memory issues due to the use of BigBufferedImage rather than the standard BufferedImage class, it still fails if the final image would be larger than about 2 gigapixels due to a separate limitation of the image processing library. If this occurs, try using a larger value for `step` or using smaller image tiles. I don't currently know of any way around this limitation.
 
 # Credits
-This project uses the library file BigBufferedImage.java by Zsolt Pocze and Dimitry Polivaev of Team Puli Space, which is available under a CC0 public domain dedication. You can find a copy at http://worksheetsoftware.com/resource/blog/java/BigBufferedImage.java.
+This project uses the library file BigBufferedImage.java by Zsolt Pocze and Dimitry Polivaev of Team Puli Space, which is available under a CC0 public domain dedication. You can find a copy on the Wayback Machine at https://web.archive.org/web/20181214170915/http://worksheetsoftware.com/resource/blog/java/BigBufferedImage.java .
 
 # License
 The third-party library file BigBufferedImage.java is public domain under a CC0 public domain dedication (see the header of the appropriate file for more information.) All other source files included here are copyright 2019 Johnathan Waugh and are hereby released under the Creative Commons Attribution license version 4.0 (https://creativecommons.org/licenses/by/4.0/).
