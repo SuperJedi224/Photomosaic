@@ -1,5 +1,5 @@
 # Input Files
-Before running, please place the smaller images you wish to use as tiles in a directory named "Input" within the running directory. These tiles should ideally be square images of uniform size (the program as given here is configured for 240x240 tiles; if you wish to use tiles of a different size, simply change the tileSize value in Photomosaic.java and recompile.)
+Before running, please place the smaller images you wish to use as tiles in a directory named "input" within the running directory. These tiles should ideally be square images of uniform size (the program as given here is configured for 240x240 tiles; if you wish to use tiles of a different size, simply change the tileSize value in Photomosaic.java and recompile.)
 
 # Use
 Once you have placed your image tiles in the Input folder and compiled the java source with the appropriate values for `tileSize` and `step`, simply run the program and input the filename of your big image on STDIN. Note that processing your image and outputing the final mosaic may take some time.
