@@ -59,6 +59,7 @@ public class Photomosaic {
 		}
 		read.close();
 		System.out.printf("Loaded %s tiles\n", colorCodes.size());
+		long ts=System.currentTimeMillis();
 		for(int x=0;x<in.getWidth()/step;x++){
 			for(int y=0;y<in.getHeight()/step;y++){
 				Color[] c=new Color[] {
@@ -74,6 +75,7 @@ public class Photomosaic {
 					int[] tileCodes=colorCodes.get(j);
 					int d=0;
 					for(int k=0;k<5;k++)d+=distanceSquared(c[k],new Color(tileCodes[k]));
+					d*=(1+0.03*Math.random());//Add some random variation
 					if(d<minD){
 						minD=d;
 						if(map.containsKey(tiles.get(j))){
@@ -93,6 +95,7 @@ public class Photomosaic {
 			}
 			System.out.printf("Finished column %s of %s\n",x+1,numCol);
 		}
+		System.out.printf("Finished %s columns in %ss\n",numCol,(System.currentTimeMillis()-ts)/1000);
 		System.out.printf("Used %s distinct tiles of %s\n",map.size(),colorCodes.size());
 		System.out.print("Saving...");
 		map=null;

@@ -27,8 +27,9 @@ public class ImageSign {
 		return new Color((int) (tr/a),(int) (tg/a),(int) (tb/a)).getRGB()&0xFFFFFF;	
 	}
 	public static void main(String[] args) throws IOException {
-		File inFolder=new File("Input");
+		File inFolder=new File("input");
 		int i=0;
+		long ts=System.currentTimeMillis();
 		PrintStream output=new PrintStream("sign.txt");
 		for(File imageFile:inFolder.listFiles()){
 			BufferedImage image=ImageIO.read(imageFile);
@@ -42,7 +43,7 @@ public class ImageSign {
 			);
 			i++;
 		}
-		System.out.println("Calculated signatures for "+i+" tile images at "+Photomosaic.tileSize+"x"+Photomosaic.tileSize);
+		System.out.println("Calculated signatures for "+i+" tile images ("+Photomosaic.tileSize+"x"+Photomosaic.tileSize+"), in "+(System.currentTimeMillis()-ts)+"ms");
 		output.close();
 	}
 
