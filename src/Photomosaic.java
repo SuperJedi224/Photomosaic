@@ -16,7 +16,7 @@ import com.pulispace.mc.ui.panorama.util.BigBufferedImage;
  * https://creativecommons.org/licenses/by/4.0/
  */
 public class Photomosaic {
-	static final int step=16;
+	static final int step=10;
 	static final int tileSize=240;
 	public static Color calculateAverage(int x,int y,int w,int h,BufferedImage b){
 		long tr=0,tg=0,tb=0;
@@ -34,8 +34,20 @@ public class Photomosaic {
 	public static int distanceSquared(Color c1,Color c2){
 		int dr=c1.getRed()-c2.getRed(),dg=c1.getGreen()-c2.getGreen(),db=c1.getBlue()-c2.getBlue();
 		return (dr*dr)+(dg*dg)+(db*db);
-	}	
-	public static void main(String[]a) throws IOException{		
+	}
+	static void cleanOldTempFiles(File dir) throws IOException {
+		if(!dir.isDirectory())throw new IOException();
+		l:for(File file:dir.listFiles()) {
+			if(file.isDirectory()&&file.getName().startsWith("buffer-")) {
+				for(File f:file.listFiles())if(!f.getName().endsWith(".dat"))continue l;
+				System.err.println("Deleting temp folder "+file.getName());
+				for(File f:file.listFiles())f.delete();
+				file.delete();
+			}
+		}
+	}
+	public static void main(String[]a) throws IOException{
+		cleanOldTempFiles(new File(System.getProperty("java.io.tmpdir")));
 		ImageSign.main(null);
 		Scanner input=new Scanner(System.in);
 		System.out.print("Enter input file:");
@@ -69,7 +81,7 @@ public class Photomosaic {
 						calculateAverage(x*step,y*step+step/2,step/2,step/2,in),
 						calculateAverage(x*step+step/2,y*step+step/2,step/2,step/2,in)
 				};
-				int minD=9999999;
+				int minD=Integer.MAX_VALUE;
 				BufferedImage b=null;
 				for(int j=0;j<colorCodes.size();j++){
 					int[] tileCodes=colorCodes.get(j);
@@ -100,5 +112,8 @@ public class Photomosaic {
 		System.out.print("Saving...");
 		map=null;
 		ImageIO.write(out,"jpg",new File("output.jpg"));
+		out.flush();
+		System.out.println(" saved.");
+
 	}
 }
