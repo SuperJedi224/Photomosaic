@@ -16,8 +16,10 @@ import com.pulispace.mc.ui.panorama.util.BigBufferedImage;
  * https://creativecommons.org/licenses/by/4.0/
  */
 public class Photomosaic {
-	static final int step=10;
+	static final int step=6;
 	static final int tileSize=240;
+	static final String tilePath="input";
+	
 	public static Color calculateAverage(int x,int y,int w,int h,BufferedImage b){
 		long tr=0,tg=0,tb=0;
 		int a=w*h;
@@ -93,7 +95,7 @@ public class Photomosaic {
 						if(map.containsKey(tiles.get(j))){
 							b=map.get(tiles.get(j));
 						}else{
-							b=ImageIO.read(new File("Input/"+tiles.get(j)));
+							b=ImageIO.read(new File(tilePath+"/"+tiles.get(j)));
 							map.put(tiles.get(j),b);
 						}
 						

@@ -27,7 +27,7 @@ public class ImageSign {
 		return new Color((int) (tr/a),(int) (tg/a),(int) (tb/a)).getRGB()&0xFFFFFF;	
 	}
 	public static void main(String[] args) throws IOException {
-		File inFolder=new File("input");
+		File inFolder=new File(Photomosaic.tilePath);
 		int i=0;
 		long ts=System.currentTimeMillis();
 		PrintStream output=new PrintStream("sign.txt");
