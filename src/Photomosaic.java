@@ -16,7 +16,7 @@ import com.pulispace.mc.ui.panorama.util.BigBufferedImage;
  * https://creativecommons.org/licenses/by/4.0/
  */
 public class Photomosaic {
-	static final int step=6;
+	static final int step=5;
 	static final int tileSize=240;
 	static final String tilePath="input";
 	
@@ -88,8 +88,11 @@ public class Photomosaic {
 				for(int j=0;j<colorCodes.size();j++){
 					int[] tileCodes=colorCodes.get(j);
 					int d=0;
-					for(int k=0;k<5;k++)d+=distanceSquared(c[k],new Color(tileCodes[k]));
-					d*=(1+0.03*Math.random());//Add some random variation
+					for(int k=0;k<5;k++) {
+						d+=distanceSquared(c[k],new Color(tileCodes[k]));
+					}
+					d*=(1+0.04*Math.random());//Add some random variation
+					
 					if(d<minD){
 						minD=d;
 						if(map.containsKey(tiles.get(j))){
@@ -112,10 +115,11 @@ public class Photomosaic {
 		System.out.printf("Finished %s columns in %ss\n",numCol,(System.currentTimeMillis()-ts)/1000);
 		System.out.printf("Used %s distinct tiles of %s\n",map.size(),colorCodes.size());
 		System.out.print("Saving...");
+		ts=System.currentTimeMillis();
 		map=null;
 		ImageIO.write(out,"jpg",new File("output.jpg"));
 		out.flush();
-		System.out.println(" saved.");
+		System.out.println(" saved in "+(System.currentTimeMillis()-ts)+"ms.");
 
 	}
 }
